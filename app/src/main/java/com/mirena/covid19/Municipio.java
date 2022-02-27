@@ -12,7 +12,17 @@ public class Municipio {
     private int defunciones;
     private float tasa_defuncion;
 
+    public Municipio(int id, long casos_pcr) {
+        this.id = id;
+        this.casos_pcr = casos_pcr;
+    }
+
     public Municipio(int id) {
+        this.id = id;
+
+    }
+
+    public Municipio(int id, int codigo_municipio, String municipio, long casos_pcr, float incidencia_acumulada, long casos_pcr_14_dias, float incidencia_acumulada_14_dias, int defunciones, float tasa_defuncion) {
         this.id = id;
         this.codigo_municipio = codigo_municipio;
         this.municipio = municipio;

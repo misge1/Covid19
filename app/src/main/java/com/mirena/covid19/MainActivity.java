@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

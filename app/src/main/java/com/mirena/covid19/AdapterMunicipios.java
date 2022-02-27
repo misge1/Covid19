@@ -23,8 +23,12 @@ import java.util.ArrayList;
 
 public class AdapterMunicipios extends
         RecyclerView.Adapter<AdapterMunicipios.ViewHolder> {
+
     private ArrayList<Municipio> municipios;
     Context context;
+
+    //el constructor para crear un adapter para municipios, dentro podriamos
+    //enviarle el arraylist con los municipios
     public AdapterMunicipios(Context c) throws JSONException {
         context=c;
         Init();
@@ -54,12 +58,18 @@ public class AdapterMunicipios extends
             }
         }
 
+        //JSONOBJECT = {}
+        //JSONARRAY = [{}]
+        //un jsonarray tiene jsonobjects
+        //el file de json es un jsonobject muy grande que tiene dentro jsonarrays con jsonobjects
+
+
         String cadenajson = writer.toString();
         JSONArray jsonArray = new JSONArray(cadenajson);
         int num = jsonArray.length();
         for(int i=0; i<num; i++){
            JSONObject jsonObject = jsonArray.getJSONObject(i);
-           Municipio municipionuevo = new Municipio(jsonObject.getInt("_id"));
+           Municipio municipionuevo = new Municipio(jsonObject.getInt("_id"), jsonObject.getLong("Casos PCR+"));
            municipios.add(municipionuevo);
         }
 
@@ -72,19 +82,29 @@ public class AdapterMunicipios extends
     }
     /**
      * Provide a reference to the type of views that you are using
+     *
      * (custom ViewHolder).
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+        private final TextView textViewMunicipios;
+        private final TextView textViewCasos;
         public ViewHolder(View view) {
             super(view);
-            textView = (TextView) view.findViewById(R.id.textViewNumber);
+            //cojo el textview donde voy a mostrar la información de municipios
+            textViewMunicipios = (TextView) view.findViewById(R.id.municipiores);
+
+            //cojo el textview donde voy a mostrar la informacion de los casos
+            textViewCasos = (TextView) view.findViewById(R.id.casosres);
         }
-        public TextView getTextView() {
-            return textView;
+        //funciones para coger el textView donde se va a mostrar la informacion
+        //de las dos cosas
+        public TextView getTextViewMunicipios() {
+            return textViewMunicipios;
         }
+        public TextView getTextViewCasos(){return textViewCasos;}
     }
-    // Create new views (invoked by the layout manager)
+    // llamado cuando RecyclerView necesita un viewHolder del tipo viewType
+    //para representar un item
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
@@ -92,10 +112,14 @@ public class AdapterMunicipios extends
                 .inflate(R.layout.listparadaview, viewGroup, false);
         return new ViewHolder(view);
     }
+
+    //llamado por el recyclerView para mostrar la información en la
+    //posicion especificada
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
-        holder.getTextView().setText(String.valueOf(municipios.get(position).getId()));
+        //coges los textview que antes has creado para cambiar la información
+        //e ir añadiendo a medida que lo lea del json
+        holder.getTextViewMunicipios().setText(String.valueOf(municipios.get(position).getId()));
+        holder.getTextViewCasos().setText(String.valueOf(municipios.get(position).getCasos_pcr()));
     }
 }
 
